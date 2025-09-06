@@ -1,9 +1,5 @@
-import { Text, View } from "react-native";
+import FavouriteScreen from "@/src/screens/FavouriteScreen";
 
-export default function TabTwoScreen() {
-  return (
-    <View style={{ flex: 1, backgroundColor: "blue", justifyContent: "center", alignItems: "center" }}>
-      <Text>Hello Favourites</Text>
-    </View>
-  );
+export default function FavouritesTabComponent() {
+  return <FavouriteScreen />;
 }
