@@ -1,12 +1,13 @@
-import { Colors } from "@/src/constants/Colors";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { BlurView } from "expo-blur";
-import { StyleSheet, useColorScheme } from "react-native";
+import { StyleSheet } from "react-native";
+
+import { useTheme } from "@/src/context/ThemeContext";
 
 export default function BlurTabBarBackground() {
-  const theme = useColorScheme();
+  const { theme } = useTheme();
 
-  return <BlurView intensity={0} style={[StyleSheet.absoluteFill, { backgroundColor: Colors[theme ?? "light"].background }]} />;
+  return <BlurView intensity={0} style={[StyleSheet.absoluteFill, { backgroundColor: theme.colors.background }]} />;
 }
 
 export function useBottomTabOverflow() {
