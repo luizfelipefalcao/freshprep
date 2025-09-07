@@ -5,6 +5,11 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  containerFavourite: {
+    position: "absolute",
+    top: adjustScale(26),
+    right: adjustScale(26),
+  },
   scrollView: {
     padding: adjustScale(23),
   },

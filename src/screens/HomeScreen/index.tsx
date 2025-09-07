@@ -40,7 +40,7 @@ function HomeScreen() {
     );
   }
 
-  const renderItem = ({ item }: { item: TUser }) => <CardUserInfo {...item} onPress={() => handleOnPressCard(item)} />;
+  const renderItem = ({ item }: { item: TUser }) => <CardUserInfo {...item} onPressCard={() => handleOnPressCard(item)} />;
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>

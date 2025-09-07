@@ -1,9 +1,11 @@
 import { ThemeProvider, useTheme } from "@/src/context/ThemeContext";
 import { Stack } from "expo-router";
-import { SafeAreaView } from "react-native";
+import { Platform, SafeAreaView as SafeAreaViewIOS } from "react-native";
+import { SafeAreaView as SafeAreaViewAndroid } from "react-native-safe-area-context";
 
 function NavigationContainer() {
   const { theme } = useTheme();
+  const SafeAreaView = Platform.OS === "ios" ? SafeAreaViewIOS : SafeAreaViewAndroid;
 
   return (
     <ThemeProvider>

@@ -1,34 +1,56 @@
 import { AntDesign, Entypo, FontAwesome, MaterialIcons } from "@expo/vector-icons";
-import { useState } from "react";
+import { useCallback } from "react";
 import { TouchableOpacity, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 
 import { TUser } from "@/src/api/types";
 import Card from "@/src/components/Card";
 import Text from "@/src/components/primitives/Text";
 import Spacer from "@/src/components/Spacer";
 import { useTheme } from "@/src/context/ThemeContext";
-
+import { RootState } from "@/src/store";
+import { removeFavourite, updateFavourite } from "@/src/store/slicers/FavouritesSlice";
 import Avatar from "../Avatar";
+
+import { HapticTab } from "@/src/components/HapticTab";
 import styles from "./styles";
 
-function CardUserInfo({ login, id, html_url, avatar_url, url, followers_url, following_url, gravatar_id, onPress }: TUser & { onPress: () => void }) {
+type ButtonProps = {
+  onPressCard: () => void;
+};
+
+function CardUserInfo({ login, id, html_url, avatar_url, url, followers_url, following_url, gravatar_id, onPressCard }: TUser & ButtonProps) {
   const { theme } = useTheme();
-  const [favourite, setFavourite] = useState(false);
+  const dispatch = useDispatch();
+  const favouriteId = useSelector((state: RootState) => state.favourites.favouriteId);
 
   const userName = login ? `${login?.charAt(0)?.toUpperCase()}${login?.slice(1)}` : "";
   const htmlUrl = html_url?.replace("https://", " ") || " ";
   const followers = followers_url?.length;
   const following = following_url?.length;
 
+  const handleOnPressFavourite = useCallback(() => {
+    // return dispatch(resetFavourites());
+    const formattedId = `${id}-${login}`;
+
+    if (favouriteId.includes(formattedId)) {
+      dispatch(removeFavourite(formattedId));
+      return;
+    }
+    dispatch(updateFavourite(formattedId));
+  }, [dispatch, id, favouriteId, login]);
+
   return (
     <View style={styles.container} key={`key_${id}`}>
       <Card shadow>
         <View style={styles.cardContent}>
-          <TouchableOpacity style={styles.containerFavourite} onPress={() => setFavourite(!favourite)} activeOpacity={1}>
-            {favourite ? <FontAwesome name="star" size={32} color={theme.colors.gold} /> : <FontAwesome name="star-o" size={32} color={theme.colors.gold} />}
+          <TouchableOpacity style={styles.containerFavourite} activeOpacity={1}>
+            <HapticTab onPress={handleOnPressFavourite}>
+              {favouriteId?.includes(`${id}-${login}`) ? <FontAwesome name="star" size={32} color={theme.colors.gold} /> : <FontAwesome name="star-o" size={32} color={theme.colors.gold} />}
+            </HapticTab>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.infoContainer} onPress={onPress} activeOpacity={1}>
+          <TouchableOpacity style={styles.infoContainer} onPress={onPressCard} activeOpacity={1}>
             <View>
               <Avatar avatar_url={avatar_url} gravatar_id={gravatar_id} iconSize={78} />
               <Spacer height={1} />
@@ -49,6 +71,7 @@ function CardUserInfo({ login, id, html_url, avatar_url, url, followers_url, fol
                 <Text fontSize={11}>{following} following</Text>
               </Text>
             </View>
+
             <MaterialIcons name="arrow-forward-ios" size={32} color={theme.colors.tabIcon} />
           </TouchableOpacity>
         </View>

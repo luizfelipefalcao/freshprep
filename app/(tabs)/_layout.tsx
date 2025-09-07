@@ -30,6 +30,7 @@ export default function TabLayout() {
 
         tabBarStyle: Platform.select({
           ios: { ...tabBarStyleFormated },
+          android: { ...tabBarStyleFormated },
           default: {},
         }),
       }}
