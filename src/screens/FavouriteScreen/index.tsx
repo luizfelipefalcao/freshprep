@@ -1,11 +1,10 @@
-import { FontAwesome5 } from "@expo/vector-icons";
 import { FlatList, View } from "react-native";
 
 import { TUser } from "@/src/api/types";
+import EmptyBox from "@/src/components/EmptyBox";
 import Error from "@/src/components/Error";
 import Header from "@/src/components/Header";
 import Loading from "@/src/components/Loading";
-import Text from "@/src/components/primitives/Text";
 import Spacer from "@/src/components/Spacer";
 import { useTheme } from "@/src/context/ThemeContext";
 import { useFavouriteUsers } from "@/src/hooks/useFavouriteUsers";
@@ -28,16 +27,7 @@ function FavouriteScreen() {
   }
 
   if (favouriteUsers?.length === 0) {
-    return (
-      <View style={[styles.emptyContainer, { backgroundColor: theme.colors.background }]}>
-        <FontAwesome5 name="users-slash" size={68} color={theme.colors.border} />
-        <Spacer height={20} />
-
-        <Text fontSize={21} fontWeight="medium" color={theme.colors.border}>
-          Oops! No favourite users yet!
-        </Text>
-      </View>
-    );
+    return <EmptyBox message="Oops! No favourite users yet!" />;
   }
 
   return (

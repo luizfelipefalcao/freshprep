@@ -65,9 +65,4 @@ export const styles = StyleSheet.create({
   userUrl: {
     fontSize: adjustScale(12),
   },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
 });
