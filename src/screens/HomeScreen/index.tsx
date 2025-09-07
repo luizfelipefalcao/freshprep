@@ -1,9 +1,6 @@
 import { router } from "expo-router";
 import React, { useCallback, useMemo, useState } from "react";
-import { FlatList, View } from "react-native";
-
-import { useTheme } from "@/src/context/ThemeContext";
-import { useUsers } from "@/src/hooks/useUsers";
+import { FlatList, RefreshControl, View } from "react-native";
 
 import { TUser } from "@/src/api/types";
 import EmptyBox from "@/src/components/EmptyBox";
@@ -11,65 +8,96 @@ import Error from "@/src/components/Error";
 import Header from "@/src/components/Header";
 import Loading from "@/src/components/Loading";
 import Spacer from "@/src/components/Spacer";
+import Tooltip from "@/src/components/Tooltip";
+import { useTheme } from "@/src/context/ThemeContext";
+import { usePaginatedUsers } from "@/src/hooks/usePaginatedUsers";
+import useVerifyNetworkStatus from "@/src/hooks/useVerifyNetworkStatus";
 import CardUserInfo from "./components/CardUserInfo";
 import SearchUserRow from "./components/SearchUserRow";
 
 import { styles } from "./styles";
 
 function HomeScreen() {
-  const { data: usersData, isLoading, error, refetch } = useUsers();
   const { theme } = useTheme();
+  const { data: usersData, isLoading, error, refetch: refetchUsers, fetchNextPage, hasNextPage } = usePaginatedUsers();
+  const { isConnected } = useVerifyNetworkStatus();
+
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [isTooltipVisible, setIsTooltipVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
-  /* Leave this shere for reference:
-  const { data: usersData, isLoading, error, isStale, isFetching } = useUsers();
-  const { refreshUsers } = useUsersRefresh();
-  const [refreshing, setRefreshing] = useState(false);
-
-  const handleRefresh = async () => {
-    setRefreshing(true);
-    try {
-      await refreshUsers();
-    } finally {
-      setRefreshing(false);
-    }
-  };
-  */
-
   const filteredUsers = useMemo(() => {
-    if (searchTerm === "") {
-      return usersData?.data;
-    }
-    return usersData?.data?.filter((user) => user?.login?.toLowerCase().includes(searchTerm.toLowerCase()));
+    const usersList = usersData?.pages?.flatMap((page) => page.data) || [];
+
+    if (searchTerm === "") return usersList;
+    return usersList?.filter((user) => user?.login?.toLowerCase().includes(searchTerm.toLowerCase()));
   }, [searchTerm, usersData]);
 
+  const handleVerifyNetwork = () => {
+    if (isConnected === false) return setIsTooltipVisible(true);
+    return setIsTooltipVisible(false);
+  };
+
   const handleOnPressCard = useCallback((user: TUser) => {
-    router.push({
-      pathname: "/details-screen",
-      params: { user: JSON.stringify(user) },
-    });
+    router.push({ pathname: "/details-screen", params: { user: JSON.stringify(user) } });
   }, []);
 
   const handleOnRefresh = useCallback(() => {
     setIsRefreshing(true);
-    refetch();
+    handleVerifyNetwork();
+    refetchUsers();
     setTimeout(() => setIsRefreshing(false), 800);
-  }, [refetch]);
+  }, [refetchUsers]);
+
+  const handleLoadMoreUsers = useCallback(() => {
+    if (hasNextPage && !isLoading && searchTerm === "") {
+      setIsLoadingMore(true);
+      fetchNextPage();
+      setTimeout(() => setIsLoadingMore(false), 800);
+    }
+  }, [hasNextPage, isLoading, fetchNextPage, searchTerm]);
+
+  const renderFooter = useCallback(() => {
+    if (!isLoadingMore) return null;
+    return <Loading />;
+  }, [isLoadingMore]);
+
+  const renderItem = ({ item }: { item: TUser }) => <CardUserInfo {...item} onPressCard={() => handleOnPressCard(item)} />;
+
+  const refreshControl = <RefreshControl refreshing={isRefreshing} onRefresh={handleOnRefresh} tintColor={theme.colors.enabled} />;
 
   if (isLoading) {
     return <Loading text="Loading GitHub users..." />;
   }
 
   if (error) {
-    return <Error message="Error loading GitHub users" onPress={handleOnRefresh} />;
+    return <Error message="Error loading GitHub users" onPress={refetchUsers} />;
   }
 
-  if (!filteredUsers || filteredUsers?.length === 0) {
-    return <EmptyBox message="No users found..." />;
-  }
+  const renderContent = () => {
+    if (!filteredUsers || filteredUsers?.length !== 0) return <EmptyBox message="No users found..." />;
 
-  const renderItem = ({ item }: { item: TUser }) => <CardUserInfo {...item} onPressCard={() => handleOnPressCard(item)} />;
+    return (
+      <FlatList
+        data={filteredUsers}
+        keyExtractor={(item) => item?.id?.toString()}
+        renderItem={renderItem}
+        showsVerticalScrollIndicator={false}
+        maxToRenderPerBatch={10}
+        initialNumToRender={10}
+        removeClippedSubviews={true}
+        windowSize={10}
+        contentContainerStyle={styles.listContainer}
+        onRefresh={handleOnRefresh}
+        refreshControl={refreshControl}
+        refreshing={isRefreshing}
+        onEndReached={handleLoadMoreUsers}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={renderFooter}
+      />
+    );
+  };
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -80,39 +108,10 @@ function HomeScreen() {
 
       <SearchUserRow searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
-      <FlatList
-        data={filteredUsers}
-        keyExtractor={(item) => item?.id?.toString()}
-        renderItem={renderItem}
-        showsVerticalScrollIndicator={false}
-        maxToRenderPerBatch={10}
-        initialNumToRender={10}
-        removeClippedSubviews={true}
-        windowSize={10}
-        onEndReachedThreshold={0.5}
-        contentContainerStyle={styles.listContainer}
-        onRefresh={handleOnRefresh}
-        refreshing={isRefreshing}
-      />
+      {renderContent()}
       <Spacer height={40} />
 
-      {/* <FlatList
-        data={usersData}
-        renderItem={({ item }) => <CardUserInfo {...item} />}
-        keyExtractor={(item) => item.id.toString()}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={handleRefresh}
-            // Only enable refresh if data is stale
-            enabled={shouldShowRefresh}
-          />
-        }
-        // Show loading state
-        ListEmptyComponent={
-          isLoading ? <LoadingComponent /> : <EmptyStateComponent />
-        }
-    /> */}
+      <Tooltip status="warning" isVisible={isTooltipVisible} onClose={() => setIsTooltipVisible(false)} />
     </View>
   );
 }

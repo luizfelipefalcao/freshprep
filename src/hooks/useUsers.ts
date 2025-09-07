@@ -5,7 +5,11 @@ export const useUsers = () => {
   return useQuery({
     queryKey: ["users"],
     queryFn: () => UserService.getUsers(),
-    staleTime: 1000 * 60 * 5,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
+    refetchOnMount: false,
+    refetchOnWindowFocus: true,
+    networkMode: "online",
   });
 };
 

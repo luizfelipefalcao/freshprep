@@ -6,7 +6,7 @@ import { adjustScale } from "@/src/utils/ui";
 import Spacer from "../Spacer";
 import Text from "../primitives/Text";
 
-const Loading = ({ text = "Loading..." }: { text?: string }) => {
+const Loading = ({ text }: { text?: string }) => {
   const { theme } = useTheme();
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
