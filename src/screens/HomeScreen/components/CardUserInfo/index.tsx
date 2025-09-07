@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { TUser } from "@/src/api/types";
 import Card from "@/src/components/Card";
+import { HapticTab } from "@/src/components/HapticTab";
 import Text from "@/src/components/primitives/Text";
 import Spacer from "@/src/components/Spacer";
 import { useTheme } from "@/src/context/ThemeContext";
@@ -12,7 +13,6 @@ import { RootState } from "@/src/store";
 import { removeFavourite, updateFavourite } from "@/src/store/slicers/FavouritesSlice";
 import Avatar from "../Avatar";
 
-import { HapticTab } from "@/src/components/HapticTab";
 import styles from "./styles";
 
 type ButtonProps = {
@@ -30,7 +30,6 @@ function CardUserInfo({ login, id, html_url, avatar_url, url, followers_url, fol
   const following = following_url?.length;
 
   const handleOnPressFavourite = useCallback(() => {
-    // return dispatch(resetFavourites());
     const formattedId = `${id}-${login}`;
 
     if (favouriteId.includes(formattedId)) {
