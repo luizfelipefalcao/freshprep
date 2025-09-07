@@ -9,7 +9,9 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.freshprep",
+      "appleTeamId": "GRYW8V6LUA"
     },
     "android": {
       "adaptiveIcon": {
