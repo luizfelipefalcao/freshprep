@@ -29,4 +29,5 @@ export const lightColors = {
   white: colors.white,
   black: colors.black,
   tintColor: colors.tintColorLight,
+  gold: colors.gold,
 };

@@ -1,40 +1,34 @@
+import { adjustScale } from "@/src/utils/ui";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
-    paddingTop: 50,
+  },
+  header: {
+    height: adjustScale(40),
+    alignItems: "center",
+    justifyContent: "center",
   },
   centerContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f5f5f5",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 20,
-    color: "#333",
   },
   loadingText: {
-    marginTop: 10,
-    fontSize: 16,
+    marginTop: adjustScale(10),
+    fontSize: adjustScale(16),
     color: "#666",
   },
   errorText: {
-    fontSize: 16,
-    color: "#ff4444",
+    fontSize: adjustScale(16),
     textAlign: "center",
-    marginBottom: 20,
+    marginBottom: adjustScale(20),
   },
   retryButton: {
-    backgroundColor: "#007AFF",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 8,
+    paddingHorizontal: adjustScale(20),
+    paddingVertical: adjustScale(10),
+    borderRadius: adjustScale(8),
   },
   retryButtonText: {
     color: "white",
@@ -42,35 +36,33 @@ export const styles = StyleSheet.create({
     fontWeight: "600",
   },
   listContainer: {
-    padding: 16,
+    padding: adjustScale(16),
   },
   userCard: {
-    backgroundColor: "white",
-    padding: 16,
-    marginBottom: 12,
-    borderRadius: 8,
+    padding: adjustScale(16),
+    marginBottom: adjustScale(12),
+    borderRadius: adjustScale(8),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: adjustScale(2),
     },
     shadowOpacity: 0.1,
     shadowRadius: 3.84,
     elevation: 5,
   },
   username: {
-    fontSize: 18,
+    fontSize: adjustScale(18),
     fontWeight: "bold",
     color: "#333",
-    marginBottom: 4,
+    marginBottom: adjustScale(4),
   },
   userId: {
-    fontSize: 14,
+    fontSize: adjustScale(14),
     color: "#666",
-    marginBottom: 4,
+    marginBottom: adjustScale(4),
   },
   userUrl: {
-    fontSize: 12,
-    color: "#007AFF",
+    fontSize: adjustScale(12),
   },
 });

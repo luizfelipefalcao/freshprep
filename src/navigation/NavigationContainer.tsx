@@ -1,17 +1,19 @@
+import { ThemeProvider, useTheme } from "@/src/context/ThemeContext";
 import { Stack } from "expo-router";
-import { SafeAreaView, useColorScheme } from "react-native";
-import { Colors } from "../constants/Colors";
+import { SafeAreaView } from "react-native";
 
 function NavigationContainer() {
-  const theme = useColorScheme();
+  const { theme } = useTheme();
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors[theme ?? "light"].background }}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </SafeAreaView>
+    <ThemeProvider>
+      <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+      </SafeAreaView>
+    </ThemeProvider>
   );
 }
 

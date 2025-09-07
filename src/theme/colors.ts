@@ -75,4 +75,5 @@ export const colors = {
   accentRed: "#e4334e",
   accentPink: "#ef3a8d",
   accentYellow: "#e3a400",
+  gold: "#ffd700",
 };
