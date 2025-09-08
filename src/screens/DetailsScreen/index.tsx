@@ -36,8 +36,8 @@ function DetailsScreen() {
 
   const handleOnPressFavourite = useCallback(() => {
     const formattedId = `${id}-${login}`;
-
     if (favouriteId.includes(formattedId)) return dispatch(removeFavourite(formattedId));
+
     return dispatch(updateFavourite(formattedId));
   }, [dispatch, id, favouriteId, login]);
 

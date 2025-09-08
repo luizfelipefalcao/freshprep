@@ -281,7 +281,6 @@ export const useUserRepos = (username: string) => {
 - **Image Optimization** - Efficient image handling
 
 ### User Experience
-- **Smooth Animations** - React Native Reanimated for 60fps animations
 - **Loading States** - Progress indicators
 - **Error Boundaries** - Graceful error handling
 - **Accessibility** - Screen reader support and proper labeling
@@ -294,16 +293,18 @@ export const useUserRepos = (username: string) => {
 
 ## Get started
 
-1. Install dependencies
+1. Initialyzing via Docker
 
    ```bash
-   npm install
+   docker compose up --build
+   or yarn run docker:start
    ```
 
-2. Start the app
+2. Initialyzing via expo
 
    ```bash
-   npx expo start
+   yarn run start
+   or npm run start
    ```
 
 In the output, you'll find options to open the app in a
@@ -314,16 +315,6 @@ In the output, you'll find options to open the app in a
 - [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
 
 ## Learn more
 

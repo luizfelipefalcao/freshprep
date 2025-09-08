@@ -42,14 +42,14 @@ function HomeScreen() {
     setIsRefreshing(true);
     handleVerifyNetwork();
     await refetchUsers();
-    setTimeout(() => setIsRefreshing(false), 800);
+    setIsRefreshing(false);
   }, []);
 
   const handleLoadMoreUsers = useCallback(() => {
     if (hasNextPage && !isLoading && searchTerm === "") {
       setIsLoadingMore(true);
       fetchNextPage();
-      setTimeout(() => setIsLoadingMore(false), 800);
+      setIsLoadingMore(false);
     }
   }, [hasNextPage, isLoading, fetchNextPage, searchTerm]);
 
@@ -61,16 +61,10 @@ function HomeScreen() {
   const renderItem = ({ item }: { item: TUser }) => <CardUserInfo {...item} />;
 
   const refreshControl = <RefreshControl refreshing={isRefreshing} onRefresh={handleOnRefresh} tintColor={theme.colors.enabled} />;
+  if (isLoading) return <Loading text="Loading GitHub users..." />;
+  if (error) return <Error message="Error loading GitHub users" onPress={refetchUsers} />;
 
-  if (isLoading) {
-    return <Loading text="Loading GitHub users..." />;
-  }
-
-  if (error) {
-    return <Error message="Error loading GitHub users" onPress={refetchUsers} />;
-  }
-
-  const renderContent = () => {
+  const UserList = () => {
     if (!filteredUsers || filteredUsers?.length === 0) return <EmptyBox message="No users found..." />;
 
     return (
@@ -103,7 +97,7 @@ function HomeScreen() {
 
       <SearchUserRow searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
-      {renderContent()}
+      <UserList />
       <Spacer height={40} />
 
       <Tooltip status="warning" isVisible={isTooltipVisible} onClose={() => setIsTooltipVisible(false)} />

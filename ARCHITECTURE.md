@@ -4,7 +4,7 @@
 
 This document outlines the architectural decisions, project structure, and scalability considerations for the FreshPrep GitHub Users Explorer mobile application. The architecture is designed to be maintainable, scalable, and follows modern React Native best practices.
 
-## ��️ Project Structure & Folder Layout
+## Project Structure & Folder Layout
 
 ### High-Level Architecture
 
@@ -40,7 +40,7 @@ freshprep/
 - **Structure**:
   ```
   components/
-  ├── primitives/          # Basic UI elements (Text, Input, Button)
+  ├── primitives/         # Basic UI elements (Text, Input, Button)
   ├── Card/               # Complex card components
   ├── Header/             # Navigation headers
   ├── Loading/            # Loading states
@@ -61,7 +61,6 @@ freshprep/
   ```
   api/
   ├── client/             # HTTP client configuration
-  ├── endpoints/          # API endpoint definitions
   ├── services/           # Service layer implementations
   └── types/              # TypeScript type definitions
   ```
@@ -73,7 +72,7 @@ freshprep/
   store/
   └── slicers/
       ├── FavouritesSlice.ts    # Favorites state
-      └── UISlice.ts           # UI state
+      └── UISlice.ts            # UI state
   ```
 
 ## 🔄 React Query Configuration & Usage
@@ -169,9 +168,6 @@ describe('useFavouriteUsers', () => {
 **Scaling Plan**:
 - **Unit Tests**: Jest + React Native Testing Library
 - **Integration Tests**: Component testing with mocked APIs
-- **E2E Tests**: Detox for critical user flows
-- **Visual Regression**: Storybook + Chromatic
-- **Performance Tests**: Flipper integration
 
 #### 3. **Code Organization**
 
@@ -266,31 +262,6 @@ export const NavigationService = {
   },
 };
 ```
-
-## 🏛️ Clean Architecture Implementation
-
-### Current Architecture Layers
-
-```
-┌─────────────────────────────────────┐
-│           Presentation Layer        │
-│         (Screens, Components)       │
-├─────────────────────────────────────┤
-│           Business Logic Layer      │
-│              (Hooks)                │
-├─────────────────────────────────────┤
-│            Data Layer               │
-│        (Services, API Client)       │
-├─────────────────────────────────────┤
-│           Infrastructure Layer      │
-│    (Redux, React Query, Storage)    │
-└─────────────────────────────────────┘
-```
-
-### Dependency Flow
-- **Presentation** → **Business Logic** → **Data** → **Infrastructure**
-- **No direct dependencies** between non-adjacent layers
-- **Interface-based** communication between layers
 
 ### Future Enhancements
 - **Screen Reader Support**: Comprehensive accessibility labels

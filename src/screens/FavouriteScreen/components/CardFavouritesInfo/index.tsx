@@ -12,11 +12,10 @@ import Spacer from "@/src/components/Spacer";
 import { useTheme } from "@/src/context/ThemeContext";
 import Avatar from "@/src/screens/HomeScreen/components/Avatar";
 import { removeFavourite, updateFavourite } from "@/src/store/slicers/FavouritesSlice";
-import { updateLoading } from "../../../../store/slicers/UISlice";
 
 import styles from "./styles";
 
-function CardFavouritesInfo({ login, id, html_url, avatar_url, gravatar_id }: TUser) {
+function CardFavouritesInfo({ login, id, html_url, avatar_url, gravatar_id, onPressRemove }: TUser & { onPressRemove: () => void }) {
   const { theme } = useTheme();
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
@@ -27,16 +26,14 @@ function CardFavouritesInfo({ login, id, html_url, avatar_url, gravatar_id }: TU
 
   const handleOnPressFavourite = useCallback(async () => {
     try {
-      dispatch(updateLoading(true));
+      onPressRemove();
       dispatch(removeFavourite(formattedId));
       queryClient.invalidateQueries({ queryKey: ["favourites"] });
     } catch (error) {
       dispatch(updateFavourite(formattedId));
       console.error("Failed to remove favourite:", error);
-    } finally {
-      setTimeout(() => dispatch(updateLoading(false)), 800);
     }
-  }, [formattedId, dispatch, queryClient]);
+  }, [onPressRemove, dispatch, formattedId, queryClient]);
 
   if (!id || !login) return null;
   return (

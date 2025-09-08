@@ -1,6 +1,5 @@
 import { persistor, store } from "@/src/store/index";
 import { useFonts } from "expo-font";
-import "react-native-reanimated";
 import { Provider } from "react-redux";
 
 import { ThemeProvider } from "@/src/context/ThemeContext";

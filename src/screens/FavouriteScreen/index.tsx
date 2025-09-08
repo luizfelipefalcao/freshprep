@@ -1,29 +1,29 @@
-import { FlatList, View } from "react-native";
+import { ActivityIndicator, FlatList, View } from "react-native";
 
 import { TUser } from "@/src/api/types";
 import EmptyBox from "@/src/components/EmptyBox";
 import Error from "@/src/components/Error";
 import Header from "@/src/components/Header";
-import Loading from "@/src/components/Loading";
 import Spacer from "@/src/components/Spacer";
 import { useTheme } from "@/src/context/ThemeContext";
 import { useFavouriteUsers } from "@/src/hooks/useFavouriteUsers";
-import { RootState } from "@/src/store";
-import { useSelector } from "react-redux";
 import CardFavouritesInfo from "./components/CardFavouritesInfo";
 
+import { useCallback, useState } from "react";
 import { styles } from "./styles";
 
 function FavouriteScreen() {
-  const { data: favouriteUsers, isLoading: isLoadingFavouriteUsers, error } = useFavouriteUsers();
-  const { isLoading: isLoadingUI } = useSelector((state: RootState) => state.ui);
+  const { data: favouriteUsers, error } = useFavouriteUsers();
   const { theme } = useTheme();
+  const [isRemoving, setIsRemoving] = useState(false);
 
-  const renderItem = ({ item }: { item: TUser }) => <CardFavouritesInfo {...item} />;
+  const handleOnPressRemove = useCallback(async () => {
+    setIsRemoving(true);
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    setIsRemoving(false);
+  }, []);
 
-  if (isLoadingUI || isLoadingFavouriteUsers) {
-    return <Loading text="Loading favourite users..." />;
-  }
+  const renderItem = ({ item }: { item: TUser }) => <CardFavouritesInfo {...item} onPressRemove={handleOnPressRemove} />;
 
   if (error) {
     return <Error message="Error loading favourite users" />;
@@ -39,6 +39,8 @@ function FavouriteScreen() {
         <Header title="Favourites" />
       </View>
       <Spacer height={10} />
+
+      {isRemoving && <ActivityIndicator size="small" color={theme.colors.enabled} />}
 
       <FlatList
         data={favouriteUsers}
