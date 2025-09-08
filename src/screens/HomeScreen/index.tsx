@@ -1,4 +1,3 @@
-import { router } from "expo-router";
 import React, { useCallback, useMemo, useState } from "react";
 import { FlatList, RefreshControl, View } from "react-native";
 
@@ -39,10 +38,6 @@ function HomeScreen() {
     return setIsTooltipVisible(false);
   };
 
-  const handleOnPressCard = useCallback((user: TUser) => {
-    router.push({ pathname: "/details-screen", params: { user: JSON.stringify(user) } });
-  }, []);
-
   const handleOnRefresh = useCallback(async () => {
     setIsRefreshing(true);
     handleVerifyNetwork();
@@ -63,7 +58,7 @@ function HomeScreen() {
     return <Loading />;
   }, [isLoadingMore]);
 
-  const renderItem = ({ item }: { item: TUser }) => <CardUserInfo {...item} onPressCard={() => handleOnPressCard(item)} />;
+  const renderItem = ({ item }: { item: TUser }) => <CardUserInfo {...item} />;
 
   const refreshControl = <RefreshControl refreshing={isRefreshing} onRefresh={handleOnRefresh} tintColor={theme.colors.enabled} />;
 

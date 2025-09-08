@@ -1,6 +1,6 @@
 import { router, useLocalSearchParams } from "expo-router";
 import { useCallback, useState } from "react";
-import { Linking, ScrollView, TouchableOpacity, View } from "react-native";
+import { ScrollView, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
 import Card from "@/src/components/Card";
@@ -9,21 +9,25 @@ import Header from "@/src/components/Header";
 import Text from "@/src/components/primitives/Text";
 import Spacer from "@/src/components/Spacer";
 import { useTheme } from "@/src/context/ThemeContext";
+import { useUserRepos } from "@/src/hooks/useUserRepos";
 import { RootState } from "@/src/store";
 import { removeFavourite, updateFavourite } from "@/src/store/slicers/FavouritesSlice";
 import { FontAwesome } from "@expo/vector-icons";
 import Avatar from "./components/Avatar";
 import UserRepo from "./components/UserRepo";
+import { UserSummary } from "./components/UserSummary";
 
 import { styles } from "./styles";
 
 function DetailsScreen() {
-  const { theme } = useTheme();
   const dispatch = useDispatch();
+  const { theme } = useTheme();
   const { user } = useLocalSearchParams();
-  const { login, id, html_url, avatar_url, url, followers_url, following_url, gravatar_id, repos_url } = JSON.parse(user as string);
-  const [showShadow, setShowShadow] = useState(false);
+  const { login, id, avatar_url, gravatar_id, followers, following } = JSON.parse(user as string);
+  const { data: reposData = [] } = useUserRepos(login);
   const favouriteId = useSelector((state: RootState) => state.favourites.favouriteId);
+
+  const [showShadow, setShowShadow] = useState(false);
 
   const handleScrollShadowVisible = useCallback((event: any) => {
     const offsetY = event.nativeEvent.contentOffset.y;
@@ -31,25 +35,11 @@ function DetailsScreen() {
   }, []);
 
   const handleOnPressFavourite = useCallback(() => {
-    // return dispatch(resetFavourites());
     const formattedId = `${id}-${login}`;
 
-    if (favouriteId.includes(formattedId)) {
-      dispatch(removeFavourite(formattedId));
-      return;
-    }
-    dispatch(updateFavourite(formattedId));
+    if (favouriteId.includes(formattedId)) return dispatch(removeFavourite(formattedId));
+    return dispatch(updateFavourite(formattedId));
   }, [dispatch, id, favouriteId, login]);
-
-  const handleExternalLink = useCallback(async (url: string) => {
-    try {
-      const supported = await Linking.canOpenURL(url);
-      if (!supported) return;
-      await Linking.openURL(url);
-    } catch (error) {
-      console.log("Error", "Failed to open link");
-    }
-  }, []);
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -75,8 +65,11 @@ function DetailsScreen() {
             </TouchableOpacity>
           </View>
 
-          <UserRepo repos_url={repos_url} />
+          <UserSummary reposDataLength={reposData?.length} followingData={following} followersData={followers} />
         </Card>
+        <Spacer height={20} />
+
+        <UserRepo />
         <Spacer height={20} />
       </ScrollView>
     </View>

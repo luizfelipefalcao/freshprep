@@ -23,4 +23,47 @@ interface IUser {
   data: TUser[];
 }
 
-export type { IUser, TUser };
+interface IFavouriteUsers {
+  data: TUser[];
+  isLoading: boolean;
+  error: Error | null;
+  refetch: () => void;
+}
+
+interface IUserRepo {
+  id: number;
+  name: string;
+  description: string | null;
+  language: string | null;
+  stargazers_count: number;
+  forks_count: number;
+  updated_at: string;
+  html_url: string;
+  size: number;
+  open_issues_count: number;
+  archived: boolean;
+  fork: boolean;
+}
+
+interface IUserRepos {
+  data: IUserRepo[] | undefined;
+  isLoading: boolean;
+  error: Error | null;
+  refetch: () => void;
+}
+
+interface IUserFollowing {
+  data: TUser[] | undefined;
+  isLoading: boolean;
+  error: Error | null;
+  refetch: () => void;
+}
+
+interface IUserFollowers {
+  data: TUser[] | undefined;
+  isLoading: boolean;
+  error: Error | null;
+  refetch: () => void;
+}
+
+export type { IFavouriteUsers, IUser, IUserFollowers, IUserFollowing, IUserRepo, IUserRepos, TUser };
