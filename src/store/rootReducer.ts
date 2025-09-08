@@ -14,8 +14,8 @@ const persistConfig = {
   version: 0,
   timeout: undefined,
   storage: AsyncStorage,
-  // whitelist: ["favourites"],
-  blacklist: ["ui", "favourites"],
+  whitelist: ["favourites"],
+  blacklist: ["ui"],
 };
 
 export { persistConfig, reducers };

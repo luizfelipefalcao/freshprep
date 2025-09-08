@@ -19,7 +19,7 @@ type ButtonProps = {
   onPressCard: () => void;
 };
 
-function CardUserInfo({ login, id, html_url, avatar_url, url, followers_url, following_url, gravatar_id, onPressCard }: TUser & ButtonProps) {
+function CardUserInfo({ login, id, html_url, avatar_url, followers_url, following_url, gravatar_id, onPressCard }: TUser & ButtonProps) {
   const { theme } = useTheme();
   const dispatch = useDispatch();
   const favouriteId = useSelector((state: RootState) => state.favourites.favouriteId);
@@ -31,14 +31,11 @@ function CardUserInfo({ login, id, html_url, avatar_url, url, followers_url, fol
 
   const handleOnPressFavourite = useCallback(() => {
     const formattedId = `${id}-${login}`;
-
-    if (favouriteId.includes(formattedId)) {
-      dispatch(removeFavourite(formattedId));
-      return;
-    }
+    if (favouriteId.includes(formattedId)) return dispatch(removeFavourite(formattedId));
     dispatch(updateFavourite(formattedId));
   }, [dispatch, id, favouriteId, login]);
 
+  if (!id || !login) return null;
   return (
     <View style={styles.container} key={`key_${id}`}>
       <Card shadow>

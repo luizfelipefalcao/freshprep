@@ -8,22 +8,25 @@ import Loading from "@/src/components/Loading";
 import Spacer from "@/src/components/Spacer";
 import { useTheme } from "@/src/context/ThemeContext";
 import { useFavouriteUsers } from "@/src/hooks/useFavouriteUsers";
+import { RootState } from "@/src/store";
+import { useSelector } from "react-redux";
 import CardFavouritesInfo from "./components/CardFavouritesInfo";
 
 import { styles } from "./styles";
 
 function FavouriteScreen() {
-  const { data: favouriteUsers, isLoading, error, refetch } = useFavouriteUsers();
+  const { data: favouriteUsers, isLoading: isLoadingFavouriteUsers, error } = useFavouriteUsers();
+  const { isLoading: isLoadingUI } = useSelector((state: RootState) => state.ui);
   const { theme } = useTheme();
 
   const renderItem = ({ item }: { item: TUser }) => <CardFavouritesInfo {...item} />;
 
-  if (isLoading) {
+  if (isLoadingUI || isLoadingFavouriteUsers) {
     return <Loading text="Loading favourite users..." />;
   }
 
   if (error) {
-    return <Error message="Error loading favourite users" onPress={refetch} />;
+    return <Error message="Error loading favourite users" />;
   }
 
   if (favouriteUsers?.length === 0) {

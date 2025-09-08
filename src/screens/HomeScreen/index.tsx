@@ -43,12 +43,12 @@ function HomeScreen() {
     router.push({ pathname: "/details-screen", params: { user: JSON.stringify(user) } });
   }, []);
 
-  const handleOnRefresh = useCallback(() => {
+  const handleOnRefresh = useCallback(async () => {
     setIsRefreshing(true);
     handleVerifyNetwork();
-    refetchUsers();
+    await refetchUsers();
     setTimeout(() => setIsRefreshing(false), 800);
-  }, [refetchUsers]);
+  }, []);
 
   const handleLoadMoreUsers = useCallback(() => {
     if (hasNextPage && !isLoading && searchTerm === "") {
@@ -76,7 +76,7 @@ function HomeScreen() {
   }
 
   const renderContent = () => {
-    if (!filteredUsers || filteredUsers?.length !== 0) return <EmptyBox message="No users found..." />;
+    if (!filteredUsers || filteredUsers?.length === 0) return <EmptyBox message="No users found..." />;
 
     return (
       <FlatList
