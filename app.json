@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Fresh Prep",
-    "slug": "freshprep",
+    "name": "",
+    "slug": "",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/images/partial-react-logo.png",
-    "scheme": "freshprep",
+    "icon": "./src/assets/images/fresh-prep-logo.svg",
+    "scheme": "",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -15,7 +15,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/images/adaptive-icon.png",
+        "foregroundImage": "./src/assets/images/fresh-prep-logo.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true
@@ -30,7 +30,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./src/assets/images/splash-icon.png",
+          "image": "./src/assets/images/fresh-prep-logo.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
