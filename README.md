@@ -102,6 +102,7 @@ services:
       - /app/node_modules
     environment:
       - EXPO_PUBLIC_GITHUB_TOKEN=${GITHUB_TOKEN}
+      - EXPO_PUBLIC_API_BASE_URL=${GITHUB_API}
 ```
 
 ### Docker Benefits
