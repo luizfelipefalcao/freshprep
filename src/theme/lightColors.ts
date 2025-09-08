@@ -30,4 +30,5 @@ export const lightColors = {
   black: colors.black,
   tintColor: colors.tintColorLight,
   gold: colors.gold,
+  cardBackground: colors.cardBackground,
 };

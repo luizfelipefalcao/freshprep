@@ -1,5 +1,5 @@
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
-import { ScrollView, View } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 
 import Text from "@/src/components/primitives/Text";
 import { useTheme } from "@/src/context/ThemeContext";
@@ -9,9 +9,10 @@ interface UserSummaryProps {
   reposDataLength?: number;
   followersData?: number;
   followingData?: number;
+  isLoading?: boolean;
 }
 
-export const UserSummary = ({ reposDataLength = 0, followingData = 0, followersData = 0 }: UserSummaryProps) => {
+export const UserSummary = ({ reposDataLength = 0, followingData = 0, followersData = 0, isLoading = false }: UserSummaryProps) => {
   const { theme } = useTheme();
 
   const attributes = [
@@ -26,7 +27,7 @@ export const UserSummary = ({ reposDataLength = 0, followingData = 0, followersD
       value: followersData?.toString(),
     },
     {
-      icon: <FontAwesome name="user-plus" size={16} color={theme.colors.danger} />,
+      icon: <FontAwesome name="user-plus" size={16} color={theme.colors.success} />,
       label: "Following",
       value: followingData?.toString(),
     },
@@ -34,19 +35,25 @@ export const UserSummary = ({ reposDataLength = 0, followingData = 0, followersD
 
   return (
     <View style={styles.container}>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+      <View style={styles.attributesContainer}>
         {attributes?.map((attr, index) => (
           <View key={index} style={styles.attributeItem}>
-            <View style={styles.iconContainer}>{attr?.icon}</View>
-            <Text fontSize="large" fontWeight="bold">
-              {attr?.value}
-            </Text>
-            <Text fontSize="small" fontWeight="medium">
-              {attr?.label}
-            </Text>
+            {isLoading ? (
+              <ActivityIndicator />
+            ) : (
+              <View style={styles.attributeItem}>
+                <View style={styles.iconContainer}>{attr?.icon}</View>
+                <Text fontSize="large" fontWeight="bold">
+                  {attr?.value}
+                </Text>
+                <Text fontSize="small" fontWeight="medium">
+                  {attr?.label}
+                </Text>
+              </View>
+            )}
           </View>
         ))}
-      </ScrollView>
+      </View>
     </View>
   );
 };

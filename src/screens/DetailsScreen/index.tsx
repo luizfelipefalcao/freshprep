@@ -24,7 +24,7 @@ function DetailsScreen() {
   const { theme } = useTheme();
   const { user } = useLocalSearchParams();
   const { login, id, avatar_url, gravatar_id, followers, following } = JSON.parse(user as string);
-  const { data: reposData = [] } = useUserRepos(login);
+  const { data: reposData = [], isLoading } = useUserRepos(login);
   const favouriteId = useSelector((state: RootState) => state.favourites.favouriteId);
 
   const [showShadow, setShowShadow] = useState(false);
@@ -65,11 +65,11 @@ function DetailsScreen() {
             </TouchableOpacity>
           </View>
 
-          <UserSummary reposDataLength={reposData?.length} followingData={following} followersData={followers} />
+          <UserSummary reposDataLength={reposData?.length} followingData={following} followersData={followers} isLoading={isLoading} />
         </Card>
         <Spacer height={20} />
 
-        <UserRepo />
+        <UserRepo reposData={reposData} isLoading={isLoading} />
         <Spacer height={20} />
       </ScrollView>
     </View>

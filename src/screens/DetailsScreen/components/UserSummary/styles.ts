@@ -7,7 +7,8 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: adjustScale(8),
   },
-  scrollContent: {
+  attributesContainer: {
+    flexDirection: "row",
     gap: adjustScale(12),
     marginLeft: -adjustScale(8),
   },

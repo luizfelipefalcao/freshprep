@@ -76,4 +76,6 @@ export const colors = {
   accentPink: "#ef3a8d",
   accentYellow: "#e3a400",
   gold: "#ffd700",
+
+  cardBackground: "#64748b10",
 };

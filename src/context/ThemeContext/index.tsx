@@ -19,7 +19,7 @@ const ThemeContext = createContext<ThemeContextType>({
 });
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [enableDarkMode, setEnableDarkMode] = useState<boolean>(false);
+  const [enableDarkMode, setEnableDarkMode] = useState<boolean>(appTheme === "dark" ? true : false);
 
   useEffect(() => {
     const loadThemePreference = async () => {
